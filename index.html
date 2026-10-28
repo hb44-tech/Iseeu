@@ -1,104 +1,177 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>System Warning</title>
-</head>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>I Saw You</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-        background-color: black;
-        color: red;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding-top: 100px;
+      margin: 0;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .screen {
+      padding: 25px;
+      width: 100%;
     }
 
     h1 {
-        color: red;
-        font-size: 32px;
+      font-size: 35px;
+      margin-bottom: 20px;
     }
-    .scan-box {
-width: 50%;
-max-width: 210px;
-height: 12px;
-border: 2px solid red;
-margin: 20px auto;
-overflow: hidden;
-} 
-.scan-bar {
-    width: 0%;
-    height: 100%;
-    background: red;
-    animation: loadScan 2s linear forwards;
-}
 
-@keyframes loadScan {
-    from {
-        width: 0%;
+    p {
+      font-size: 18px;
+      line-height: 1.6;
     }
-    to {
-        width: 100%;
+
+    button {
+      background: white;
+      color: black;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
     }
-}
-.warning {
-animation: flash 1s infinite;
-}
 
-@keyframes flash {
-    0%, 100% { opacity: 1; }
-    40% { opacity: 0.3; }
-}
-.scan-box {
-width: 80%;
-max-width: 350px;
-height: 22px;
-border: 2px solid red;
-margin: 30px auto;
-overflow: hidden;
-}
+    #countdown {
+      font-size: 100px;
+      font-weight: bold;
+    }
 
-.scan-bar {
-    height: 100%;
-    width: 0%;
-    background: red;
-    animation: scanning 5s linear infinite;
-}
+    .red {
+      color: red;
+    }
 
-@keyframes scanning {
-    from { width: 0%; }
-    to { width: 100%; }
-}
-</style>
-<body><h1 class="warning">⚠ SYSTEM WARNING ⚠</h1> 
+    .hidden {
+      display: none;
+    }
 
-<h2>SECURITY BREACH DETECTED YOUR PHONE HAS BEEN INFECTED WITH A Virus </h2>
+    #finalMessage {
+      animation: appear 1.2s ease;
+    }
 
-<p>Your device has entered emergency mode and will shut down in 4s.</p>
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: scale(0.7);
+      }
 
-<p style="color: white;">
-    Initializing security scan...<div class="scan-box">
-    <div class="scan-bar"></div>
-</div>
-<p>SIMULATED SCAN IN PROGRESS...</p>
-</p>
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
 
-<p style="color: red;">
-    STATUS: SIMULATION
-</p>
-<h2 id="countdown" style="color: red;">SYSTEM LOCK IN: 10</h2><script>
-    let timeLeft = 4;
+<body>
 
-    const timer = setInterval(function() {
-        timeLeft--;
+  <!-- Starting screen -->
+  <div class="screen" id="startScreen">
+    <h1>I SAW YOU 👁️</h1>
 
-        if (timeLeft > 0) {
-            document.getElementById("countdown").textContent =
-                "SYSTEM LOCK IN: " + timeLeft;
+    <p>Something strange has been detected
+    👇 Click below to download 
+    .</p>
+    <p>Tap below to download .</p>
+
+    <button onclick="startPrank()">Download </button>
+  </div>
+
+  <!-- Countdown screen -->
+  <div class="screen hidden" id="countScreen">
+    <h1 class="red">DOWNLOADING... </h1>
+
+    <p>file installing ...</p>
+
+    <div id="countdown">5</div>
+
+    <p id="status">Preparing scan...</p>
+  </div>
+
+ 
+  <div class="screen hidden" id="finalMessage">
+    <h1 class="red">VIRUS INPUT SUCCESSFUL </h1>
+
+    <p>YOUR PHONE HAS BEEN INFECTED WITH A VIRUS .</p>
+
+    <p>YOUR PHONE WILL WILL RESET If NOT RESTARTED WITHIN 3HRS</p>
+
+    <button onclick="location.reload()">PLAY AGAIN</button>
+  </div>
+
+  <script>
+    function startPrank() {
+      document.getElementById("startScreen")
+        .classList.add("hidden");
+
+      document.getElementById("countScreen")
+        .classList.remove("hidden");
+
+      let count = 5;
+
+      const messages = [
+        "Preparing scan...",
+        "Checking system...",
+        "Scanning...",
+        "Almost done...",
+        "Finalizing..."
+      ];
+
+      document.getElementById("status").textContent =
+        messages[0];
+
+      const timer = setInterval(function() {
+        count--;
+
+        if (count > 0) {
+          document.getElementById("countdown")
+            .textContent = count;
+
+          document.getElementById("status")
+            .textContent = messages[5 - count];
         } else {
-            clearInterval(timer);
-            document.getElementById("countdown").textContent =
-                "JUST KIDDING! 😂 YOU GOT PRANKED by Hb!";
-            document.getElementById("countdown").style.color = "lime";
+          clearInterval(timer);
+
+          document.getElementById("countdown")
+            .textContent = "!";
+
+          document.getElementById("status")
+            .textContent = "Scan complete!";
+
+          setTimeout(function() {
+            showFinalMessage();
+          }, 500);
         }
-    }, 1000);
-</script>
+      }, 1000);
+    }
+
+    function showFinalMessage() {
+      document.getElementById("countScreen")
+        .classList.add("hidden");
+
+      document.getElementById("finalMessage")
+        .classList.remove("hidden");
+    }
+  </script>
+
 </body>
 </html>
